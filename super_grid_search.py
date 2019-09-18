@@ -27,7 +27,7 @@ models_final = {
     "Ridge": {
         "model": Ridge(),
         "params": {
-        "alpha": [1, 0.1, 0.01, 0.001, 0],
+        "alpha": [1, 0.1, 0.01, 0],
         "fit_intercept": [True, False],
         "solver": ["svd", "cholesky", "sparse_cg", "sag"],
         }
@@ -41,7 +41,7 @@ models_final = {
     "Lasso": {
         "model": Lasso(),
         "params": {
-        "alpha": [1, 0.1, 0.01, 0.001, 0.0001, 0],
+        "alpha": [1, 0.1, 0.01, 0.001, 0],
         "fit_intercept": [True, False]
         }
     },
@@ -49,32 +49,30 @@ models_final = {
         "model": ElasticNet(),
         "params": {
         "max_iter": [1, 5, 10],
-        "alpha": [0.0001, 0.001, 0.01, 0.1, 1, 10],
-        "l1_ratio": np.arange(0.0, 1.0, 0.2)
+        "alpha": [0.001, 0.01, 0.1, 1],
+        "l1_ratio": [0.25, 0.5, 0.75]
         }
     },
     "RandomForestRegressor": {
         "model": RandomForestRegressor(),
         "params": {
         "bootstrap": [True, False],
-        "max_depth": [2, 3, 5, 10, 20, 40, 80, None],
+        "max_depth": [2, 3, 5, 15, None],
         "max_features": ["auto", "sqrt"],
         "min_samples_leaf": [1, 2, 4],
         "min_samples_split": [2, 5, 10],
         "n_estimators": [
-            10,
             50,
-            100,
-            400,
-            1000,
-            2000,
+            200,
+            500,
+            1000
         ]
         }
     },
     "KNeighborsRegressor": {
         "model": KNeighborsRegressor(),
         "params": {
-        "n_neighbors": [2, 4, 8, 16, 32],
+        "n_neighbors": [2, 4, 12],
         "weights": ["uniform", "distance"],
         "algorithm": [
             "auto",
@@ -87,10 +85,10 @@ models_final = {
     "GradientBoostingRegressor": {
         "model": GradientBoostingRegressor(),
         "params": {
-        "n_estimators": [20, 50, 100, 200],
-        "learning_rate": [0.1, 0.05, 0.02, 0.01],
-        "max_depth": [2, 3, 6, 10, 20],
-        "min_samples_leaf": [3, 6, 9, 15],
+        "n_estimators": [20, 50, 100],
+        "learning_rate": [0.1, 0.05, 0.01],
+        "max_depth": [3, 6, 15],
+        "min_samples_leaf": [3, 6, 10],
         "max_features": ["auto", "sqrt"]
         }
     }
