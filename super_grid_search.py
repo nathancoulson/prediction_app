@@ -59,7 +59,7 @@ models_final = {
         "params": {
         "bootstrap": [True],
         "max_depth": [5],
-        "max_features": ["auto"],
+        "max_features": ["sqrt"],
         "min_samples_leaf": [2],
         "min_samples_split": [5],
         "n_estimators": [100],
@@ -115,7 +115,7 @@ models_final = {
         "params": {
         "bootstrap": [True, False],
         "max_depth": [2, 3, 5, 10, 20, 40, 80, None],
-        "max_features": ["auto", "sqrt"],
+        "max_features": ["sqrt"],
         "min_samples_leaf": [1, 2, 4],
         "min_samples_split": [2, 5, 10],
         "n_jobs": [-1],
