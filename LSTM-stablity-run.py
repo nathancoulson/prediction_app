@@ -139,9 +139,14 @@ np.random.seed(seed)
 # stability search
 
 # collect data across multiple repeats
-train = DataFrame()
-val = DataFrame()
-for i in range(10):
+train = pd.DataFrame()
+val = pd.DataFrame()
+holdout = pd.DataFrame()
+app_bias_error = pd.DataFrame()
+
+hold_lst = []
+app_lst = []
+for i in range(5):
     # define model
     
     model = Sequential()
@@ -157,13 +162,45 @@ for i in range(10):
     # story history
     train[str(i)] = history.history['loss']
     val[str(i)] = history.history['val_loss']
+    
+    # evaluate model by MAE
+    
+    test_MAE = model.evaluate(X_test, sub_y_test, verbose=0)
+
+    holdout[str(i)] = [test_MAE]
+    hold_lst.append(test_MAE)
+
+    # compared predicted request set "app bias" with actual "app bias"
+
+    app_bias_list = get_app_bias_error(X_test, sub_y_test, model)
+
+    app_bias_df = pd.DataFrame(app_bias_list)
+
+    app_bias_e = app_bias_df.mean().mean()
+    
+    app_bias_error[str(i)] = [app_bias_e]
+    app_lst.append(app_bias_e)
+
 
 # plot train and validation loss across multiple runs
-pyplot.plot(train, color='blue', label='train')
-pyplot.plot(val, color='orange', label='validation')
-pyplot.title('model train vs validation loss')
-pyplot.ylabel('loss')
-pyplot.xlabel('epoch')
-pyplot.show()
+plt.plot(train.T, color='blue', label='train')
+plt.plot(val.T, color='orange', label='validation')
+plt.plot(holdout.T, color='green', label='test')
+plt.plot(app_bias_error.T, color='red', label='app_bias_error')
+plt.legend()
+
+plt.title('Final LSTM model stability run')
+plt.ylabel('loss')
+plt.xlabel('run')
+plt.show()
+
+
+
+final_stable_model_list = [train, val, holdout, app_bias_error]
+
+
+with open('final_LSTM_model_stability', 'wb') as f:
+                        pickle.dump(final_stable_model_list, f)
+
 
 
