@@ -82,7 +82,7 @@ def get_app_bias_error(X_test, y_test, model):
         predict_dict = create_reqset_dict([col for col in test_df.columns if "CS_" in col], model.predict(X_test[i].reshape(1,1000,129))[0])
         predict_bias = get_reqset_bias(predict_dict)
 
-        actual_dict = create_reqset_dict([col for col in test_df.columns if "CS_" in col], y[i])
+        actual_dict = create_reqset_dict([col for col in test_df.columns if "CS_" in col], y_test[i])
         actual_bias = get_reqset_bias(actual_dict)
 
         error_vectors_app_bias.append(np.absolute(np.array(actual_bias) - np.array(predict_bias)))
