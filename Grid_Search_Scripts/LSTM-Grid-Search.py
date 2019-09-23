@@ -50,6 +50,15 @@ session = tf.Session(config=config)
 
 tf.keras.backend.set_session(session)
 
+
+path = '../Datasets/'
+model_path = '../Models/'
+
+# Read in config file - column list
+
+cumsum_cols_p = open(path + 'cumsum_cols.pkl', 'rb')
+cumsum_cols = pickle.load(cumsum_cols_p)
+
 # Eval transformation functions
 
 def most_common(lst): 
@@ -79,56 +88,35 @@ def get_reqset_bias(dictionary):
 def get_app_bias_error(X_test, y_test, model):
     error_vectors_app_bias = list()
     for i in range(len(X_test)):
-        predict_dict = create_reqset_dict([col for col in test_df.columns if "CS_" in col], model.predict(X_test[i].reshape(1,1000,129))[0])
+        predict_dict = create_reqset_dict(cumsum_cols, model.predict(X_test[i].reshape(1,1000,129))[0])
         predict_bias = get_reqset_bias(predict_dict)
 
-        actual_dict = create_reqset_dict([col for col in test_df.columns if "CS_" in col], y[i])
+        actual_dict = create_reqset_dict(cumsum_cols, y_test[i])
         actual_bias = get_reqset_bias(actual_dict)
 
         error_vectors_app_bias.append(np.absolute(np.array(actual_bias) - np.array(predict_bias)))
 
     return error_vectors_app_bias
 
-train_df = pd.read_parquet('train.parquet')
-test_df = pd.read_parquet('test.parquet')
+# Read in prepared datasets
 
-# First half of Test as validation - second half: holdout
+X_val_p = open(path + 'X_val.pkl', 'rb')
+X_val = pickle.load(X_val_p)
 
-holdout_df = test_df[:1120000]
-test_df = test_df[1120000:2240000]
+sub_y_val_p = open(path + 'y_val.pkl', 'rb')
+sub_y_val = pickle.load(sub_y_val_p)
 
-# Prepare test data as validation
+X_train_p = open(path + 'X_train.pkl', 'rb')
+X = pickle.load(X_train_p)
 
-y_val = array(test_df[[col for col in test_df.columns if "CS_" in col]]).reshape(1120000,129)
+y_train_p = open(path + 'y_train.pkl', 'rb')
+sub_y = pickle.load(y_train_p)
 
-X_val = test_df[[col for col in test_df.columns if "CS_" not in col]].to_numpy()
-X_val = X_val.reshape(1120,1000,129)
+X_test_p = open(path + 'X_test.pkl', 'rb')
+X_test = pickle.load(X_test_p)
 
-# Get the thousandth request vector for y
-
-sub_y_val = y_val[::1000]
-
-# Prepare training data
-
-y = array(train_df[[col for col in train_df.columns if "CS_" in col]]).reshape(2241000,129)
-
-X = train_df[[col for col in train_df.columns if "CS_" not in col]].to_numpy()
-X = X.reshape(2241,1000,129)
-
-# Get the thousandth request vector for y
-
-sub_y = y[::1000]
-
-# Prepare test data
-
-y_test = array(holdout_df[[col for col in holdout_df.columns if "CS_" in col]]).reshape(1120000,129)
-
-X_test = holdout_df[[col for col in holdout_df.columns if "CS_" not in col]].to_numpy()
-X_test = X_test.reshape(1120,1000,129)
-
-# Get the thousandth request vector for y
-
-sub_y_test = y_test[::1000]
+y_test_p = open(path + 'y_test.pkl', 'rb')
+sub_y_test = pickle.load(y_test_p)
 
 results = list()
 
@@ -138,10 +126,10 @@ np.random.seed(seed)
 
 # grid search
 
-optimizers = [keras.optimizers.Adam(lr=0.01), keras.optimizers.Adam(lr=0.001)]
+optimizers = [keras.optimizers.Adam(lr=0.01)]
 epochs = [1]
 batches = [128]
-num_units = [75,125]
+num_units = [50,75,125]
 num_layers = [2,3,4]
 
 for optimizer in optimizers:
@@ -187,12 +175,13 @@ for optimizer in optimizers:
                         "model-json": model.to_json(),
                         "model-history": history.history,
                         "MAE-holdout-set": loss_string,
-                        "app-bias-mean-holdout-set": app_bias_mean
+                        "app-bias-mean-holdout-set": app_bias_mean,
+                        "model-object": model
                     }
                     
                     print(model_dict)
                     
                     results.append(model_dict)
 
-                    with open('results_reduced_19_5_001', 'wb') as f:
+                    with open('../LSTM_new_results/results_new_21_128.pkl', 'wb') as f:
                         pickle.dump(results, f)
