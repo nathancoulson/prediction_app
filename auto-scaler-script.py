@@ -149,9 +149,8 @@ model_path = sys.argv[6]
 con_dict = generate_con_dict(con_list)
 
 log_df = generate_log_df_file(
-    log_data_path
-    + "w-logs-11-09-19-2_3_4bias4C1-2X2-6X3-2X4-6.txt",
-    con_dict,
+    log_data_path,
+    con_dict
 )
 
 latest_logs = preprocess_log_df(log_df)
@@ -167,9 +166,6 @@ LSTM_model = pickle.load(LSTM_model_p)
 
 next_n_request_mix = LSTM_model.predict(latest_logs)
 
-with open("next_n_request_mix.pkl", "wb") as f:
-    pickle.dump(next_n_request_mix, f)
-
 ######## Predict request response time given predicted requests and available resources
 
 # Prepare modelling table - add container information
@@ -182,7 +178,7 @@ request_resource_matrix = np.insert(
 
 # Import best supervised model
 
-super_model_p = open(model_path + "super_model.pkl", "rb")
+super_model_p = open(model_path + "RF_super_model.pkl", "rb")
 super_model = pickle.load(super_model_p)
 
 ######## Predict request response time based on current resources
@@ -234,5 +230,5 @@ print(
             "app_4",
             "request_response_time",
         ]
-    ].iloc[0:10]
+    ].iloc[0:50].mean()
 )
