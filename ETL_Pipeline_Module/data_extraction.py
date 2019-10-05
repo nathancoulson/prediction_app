@@ -132,3 +132,21 @@ def generate_log_df(log_files_path):
     logs_df = pd.DataFrame(all_logs)
 
     return logs_df
+
+
+def preprocess_log_df(log_df):
+    # Create categorical variables for url requests
+
+    log_df = pd.get_dummies(log_df, columns=["url"])
+
+    # Create url request only dataframe
+
+    req_df = log_df[
+        [col for col in log_df.columns if "url" in col]
+    ]
+
+    logs = (
+        req_df.tail(1000).to_numpy().reshape(1, 1000, 129)
+    )
+
+    return logs
