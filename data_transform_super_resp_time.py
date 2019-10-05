@@ -67,4 +67,3 @@ def create_resp_time_model_table(log_df, path):
     log_df.to_parquet(path + 'resp_df.parquet')
     
     print("Response time modelling table saved at path: " + path)
-

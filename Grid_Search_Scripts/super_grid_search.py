@@ -28,62 +28,6 @@ models_final = {
     "Ridge": {
         "model": Ridge(),
         "params": {
-        "alpha": [0.1],
-        "fit_intercept": [True],
-        "solver": ["svd"],
-        }
-    },
-    "LinearRegression": {
-        "model": LinearRegression(),
-        "params": {
-        "fit_intercept": [True]
-        }
-    },
-    "Lasso": {
-        "model": Lasso(),
-        "params": {
-        "alpha": [0.1],
-        "fit_intercept": [True]
-        }
-    },
-    "ElasticNet": {
-        "model": ElasticNet(),
-        "params": {
-        "max_iter": [5],
-        "alpha": [0.01],
-        "l1_ratio": [0.2]
-        }
-    },
-    "RandomForestRegressor": {
-        "model": RandomForestRegressor(),
-        "params": {
-        "bootstrap": [True],
-        "max_depth": [5],
-        "max_features": ["sqrt"],
-        "min_samples_leaf": [2],
-        "min_samples_split": [5],
-        "n_estimators": [100],
-        "n_jobs": [-1]
-        }
-    },
-    "KNeighborsRegressor": {
-        "model": KNeighborsRegressor(),
-        "params": {
-        "n_neighbors": [8],
-        "weights": ["distance"],
-        "algorithm": [
-            "auto"
-        ],
-        "n_jobs": [-1]
-        }
-    }
-}
-
-'''
-models_final = {
-    "Ridge": {
-        "model": Ridge(),
-        "params": {
         "alpha": [1, 0.1, 0.01, 0.001, 0],
         "fit_intercept": [True, False],
         "solver": ["svd", "cholesky", "sparse_cg", "sag"],
@@ -144,7 +88,7 @@ models_final = {
         }
     }
 }
-'''
+
 
 # Extract and prepare data
 
