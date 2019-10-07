@@ -34,7 +34,7 @@ The functions are stored in the Auto_Scaler_Module.
 # Deployment
 
 We deployed the microservice based web application on a 2 Core, 4GB ram Ubuntu VM using Docker Swarm
-We deployed the Locust.io container, which generates the simulated tra�c, on an identical VM
+We deployed the Locust.io container, which generates the simulated traffic, on an identical VM
 We deployed the machine learning pipeline on another VM (32 cores, 128GB ram) to prevent interference due to resource utilisation
 
 During the experiment runs we used a linux utility called cronjobs to synchronise the NGINX log files from the microservice app VM with the machine learning pipeline VM every minute and to run the pipeline on the most recent 1000 lines of log data.
