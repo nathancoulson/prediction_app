@@ -1,15 +1,19 @@
 import pandas as pd
-from ETL_Pipeline_Module.data_extraction import clean_log, clean_error
+from ETL_Pipeline_Module.data_extraction import (
+    clean_log,
+    clean_error,
+)
+
 
 def apply_minmax(x, min_val, max_val):
     return (x - min_val) / (max_val - min_val)
 
 
 def generate_con_dict(con_list):
-    '''
+    """
     Create dictionary of container allocations from command line input
-    '''
-    
+    """
+
     con_dict = dict()
 
     con_dict = {
@@ -31,10 +35,10 @@ def generate_con_dict(con_list):
 
 
 def generate_log_df_file(log_file_path, container_dict):
-    '''
+    """
     Generate dataframe from single log file - modified version of multi-file function in data extraction
-    '''
-    
+    """
+
     all_logs = list()
     with open(log_file_path, "r") as f:
         line = f.readline()
@@ -55,10 +59,10 @@ def generate_log_df_file(log_file_path, container_dict):
 
 
 def preprocess_log_df(log_df):
-    '''
+    """
     Select last 1000 logs and reshape for LSTM modelling
-    '''
-    
+    """
+
     # Create categorical variables for url requests
 
     log_df = pd.get_dummies(log_df, columns=["url"])

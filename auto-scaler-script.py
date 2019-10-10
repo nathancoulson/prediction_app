@@ -8,7 +8,6 @@ from numpy import array
 import pickle
 import sys
 import itertools
-
 from sklearn.linear_model import Ridge
 import sklearn
 import keras

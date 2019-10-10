@@ -9,6 +9,7 @@ import re
 
 # LSTM Eval transformation functions
 
+
 def most_common(lst):
     return max(set(lst), key=lst.count)
 
@@ -92,6 +93,7 @@ def get_app_bias_error(X_test, y_test, model, cumsum_cols):
         )
 
     return error_vectors_app_bias
+
 
 def is_bias(url, lst):
     if url in lst:

@@ -6,6 +6,7 @@ from os import listdir
 from os.path import isfile, join
 import datetime
 
+
 def format_datetime(datetime):
     """
     Format datetime string into format which is easily parsed by Pandas
@@ -115,7 +116,9 @@ def generate_log_df(log_files_path):
         # Extract container information from filename
         container_dict = extract_con_info(file)
 
-        with open((log_files_path + "{}").format(file), "r") as f:
+        with open(
+            (log_files_path + "{}").format(file), "r"
+        ) as f:
             line = f.readline()
             while line:
                 line = f.readline()
@@ -135,6 +138,10 @@ def generate_log_df(log_files_path):
 
 
 def preprocess_log_df(log_df):
+    """
+    Return the last 1000 logs, reshaped for modelling.
+    """
+
     # Create categorical variables for url requests
 
     log_df = pd.get_dummies(log_df, columns=["url"])
